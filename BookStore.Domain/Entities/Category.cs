@@ -1,0 +1,10 @@
+﻿using BookStore.Domain.Entities.Base;
+
+namespace BookStore.Domain.Entities
+{
+    public class Category : BaseEntity
+    {
+        public string Name { get; set; }
+        public ICollection<Book> Books { get; set; } = new List<Book>();
+    }
+}
