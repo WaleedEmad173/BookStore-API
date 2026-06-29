@@ -1,6 +1,6 @@
 ﻿namespace BookStore.Application.DTOs.Book
 {
-    internal class CreateBookDto
+    public class CreateBookDto
     {
         public string Title { get; set; } = string.Empty;
         public decimal Price { get; set; }

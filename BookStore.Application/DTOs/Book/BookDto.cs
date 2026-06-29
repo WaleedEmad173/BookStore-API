@@ -1,6 +1,6 @@
 ﻿namespace BookStore.Application.DTOs.Book
 {
-    internal class BookDto
+    public class BookDto
     {
         public int Id { get; set; }
         public string Title { get; set; }
