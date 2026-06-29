@@ -9,6 +9,8 @@ namespace BookStore.Domain.Entities
         public decimal TotalAmount { get; set; }
         public string ShippingAddress { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public int UserId { get; set; }
+        public AppUser User { get; set; } = null!;
 
     }
 }

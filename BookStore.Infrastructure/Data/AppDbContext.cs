@@ -1,0 +1,28 @@
+﻿using BookStore.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+namespace BookStore.Infrastructure.Data
+{
+    public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
+    {
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+        }
+
+        public DbSet<Book> Books => Set<Book>();
+        public DbSet<Author> Authors => Set<Author>();
+        public DbSet<Category> Categories => Set<Category>();
+        public DbSet<Order> Orders => Set<Order>();
+        public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        }
+    }
+}
