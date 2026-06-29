@@ -13,6 +13,10 @@ namespace BookStore.Infrastructure.EntityConfigurations
             builder.Property(oi => oi.Quantity)
                 .IsRequired();
 
+            builder.Property(o => o.ItemPrice)
+                .HasPrecision(18, 2)
+                .IsRequired();
+
             builder.HasOne(oi => oi.Book)
                 .WithMany(b => b.OrderItems)
                 .HasForeignKey(oi => oi.BookId)

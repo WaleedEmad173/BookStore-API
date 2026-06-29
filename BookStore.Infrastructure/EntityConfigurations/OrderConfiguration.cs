@@ -22,10 +22,10 @@ namespace BookStore.Infrastructure.EntityConfigurations
                 .IsRequired()
                 .HasMaxLength(500);
 
-            builder.HasMany(o => o.OrderItems)
-                .WithOne(oi => oi.Order)
-                .HasForeignKey(oi => oi.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

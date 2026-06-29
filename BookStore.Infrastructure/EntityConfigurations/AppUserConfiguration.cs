@@ -8,10 +8,7 @@ namespace BookStore.Infrastructure.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
-            builder.HasMany(u => u.Orders)
-            .WithOne(o => o.User)
-            .HasForeignKey(o => o.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

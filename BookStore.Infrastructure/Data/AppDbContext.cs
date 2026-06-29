@@ -1,4 +1,5 @@
 ﻿using BookStore.Domain.Entities;
+using BookStore.Domain.Entities.Base;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,28 @@ namespace BookStore.Infrastructure.Data
             base.OnModelCreating(builder);
 
             builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
+        }
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entries = ChangeTracker
+                .Entries()
+                .Where(e => e.Entity is BaseEntity && (e.State == EntityState.Added || e.State == EntityState.Modified));
+            foreach (var entityEntry in entries)
+            {
+                var entity = (BaseEntity)entityEntry.Entity;
+
+                entity.UpdatedAt = DateTime.UtcNow;
+                if (entityEntry.State == EntityState.Added)
+                {
+                    entity.CreatedAt = DateTime.UtcNow;
+                }
+                else
+                {
+                    entityEntry.Property(nameof(BaseEntity.CreatedAt)).IsModified = false;
+                }
+            }
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }
