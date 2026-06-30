@@ -10,9 +10,4 @@
     <ProjectReference Include="..\BookStore.Domain\BookStore.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="RepositoryInterfaces\Generic\" />
-    <Folder Include="RepositoryInterfaces\UnitOfWork\" />
-  </ItemGroup>
-
 </Project>
