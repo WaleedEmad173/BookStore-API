@@ -1,4 +1,6 @@
-﻿namespace BookStore.Application.DTOs.Order
+﻿using BookStore.Application.DTOs.OrderItem;
+
+namespace BookStore.Application.DTOs.Order
 {
     public class CreateOrderDto
     {
