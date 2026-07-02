@@ -8,7 +8,13 @@ namespace BookStore.Infrastructure.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
+            builder.Property(au => au.FirstName)
+                .IsRequired()
+                .HasMaxLength(100);
 
+            builder.Property(au => au.LastName)
+                .IsRequired()
+                .HasMaxLength(100);
         }
     }
 }

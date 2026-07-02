@@ -1,3 +1,7 @@
+using BookStore.API.Middleware;
+using BookStore.Application.Services.Implementation;
+using BookStore.Application.Services.Interfaces;
+using BookStore.Application.Settings;
 using BookStore.Domain.Entities;
 using BookStore.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,6 +18,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+
+var testKey = builder.Configuration["Jwt:Key"];
+System.Diagnostics.Debug.WriteLine($"=== KEY TEST: {testKey} ===");
+
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -64,7 +75,7 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
     string[] roles = { "User", "Admin", "Support" };
 
@@ -72,10 +83,14 @@ using (var scope = app.Services.CreateScope())
     {
         if (!await roleManager.RoleExistsAsync(role))
         {
-            await roleManager.CreateAsync(new IdentityRole(role));
+            await roleManager.CreateAsync(new IdentityRole<int>(role));
         }
     }
 }
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
