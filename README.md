@@ -1,1 +1,2 @@
-# BookStore-Web-API
+# BookStore-API
+

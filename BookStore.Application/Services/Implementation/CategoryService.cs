@@ -1,33 +1,79 @@
-﻿using BookStore.Application.DTOs.Category;
+﻿using AutoMapper;
+using BookStore.Application.DTOs.Category;
+using BookStore.Application.Exceptions;
+using BookStore.Application.RepositoryInterfaces.UnitOfWorkInterfaces;
 using BookStore.Application.Services.Interfaces;
+using BookStore.Domain.Entities;
 
 namespace BookStore.Application.Services.Implementation
 {
     public class CategoryService : ICategoryService
     {
-        public Task<CategoryDto> Create(CreateCategoryDto dto)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
+        public async Task<CategoryDto> Create(CreateCategoryDto dto)
+        {
+            var exist = await _unitOfWork.Categories.AnyAsync(c => c.Name == dto.Name);
+
+            if (exist)
+                throw new DuplicateException("Category already exist.");
+
+            var category = new Category
+            {
+                Name = dto.Name
+            };
+
+            await _unitOfWork.Categories.AddAsync(category);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<CategoryDto>(category);
         }
 
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            var category = await _unitOfWork.Categories.GetByIdAsync(id);
+
+            if (category == null) throw new NotFoundException("Category", id);
+
+            await _unitOfWork.Categories.DeleteAsync(category);
+            await _unitOfWork.SaveChangesAsync();
+
+            return true;
         }
 
-        public Task<List<CategoryDto>> GetAll()
+        public async Task<List<CategoryDto>> GetAll()
         {
-            throw new NotImplementedException();
+            var categories = await _unitOfWork.Categories.GetAllAsync();
+
+            return _mapper.Map<List<CategoryDto>>(categories);
         }
 
-        public Task<CategoryDto> GetById(int id)
+        public async Task<CategoryDto> GetById(int id)
         {
-            throw new NotImplementedException();
+            var Category = await _unitOfWork.Categories.GetByIdAsync(id);
+
+            if (Category == null)
+                throw new NotFoundException("Category", id);
+
+            return _mapper.Map<CategoryDto>(Category);
         }
 
-        public Task<CategoryDto> Update(int id, UpdateCategoryDto dto)
+        public async Task<CategoryDto> Update(int id, UpdateCategoryDto dto)
         {
-            throw new NotImplementedException();
+            var Category = await _unitOfWork.Categories.GetByIdAsync(id);
+
+            if (Category == null)
+                throw new NotFoundException("Category", id);
+
+            Category.Name = dto.Name;
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<CategoryDto>(Category);
         }
     }
 }
