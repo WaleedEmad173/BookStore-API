@@ -86,7 +86,7 @@ namespace BookStore.Application.Services.Implementation
             List<Claim> claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email!)
             };
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             var token = new JwtSecurityToken(

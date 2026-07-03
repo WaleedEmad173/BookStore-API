@@ -27,6 +27,7 @@ namespace BookStore.API.Middleware
                     NotFoundException => (HttpStatusCode.NotFound, ex.Message),
                     BadRequestException => (HttpStatusCode.BadRequest, ex.Message),
                     DuplicateException => (HttpStatusCode.Conflict, ex.Message),
+                    ConflictException => (HttpStatusCode.Conflict, ex.Message),
                     _ => (HttpStatusCode.InternalServerError, "An unexpected error occurred!")
                 };
                 if (statuscode == HttpStatusCode.InternalServerError)

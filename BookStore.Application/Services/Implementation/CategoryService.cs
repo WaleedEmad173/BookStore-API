@@ -23,10 +23,7 @@ namespace BookStore.Application.Services.Implementation
             if (exist)
                 throw new DuplicateException("Category already exist.");
 
-            var category = new Category
-            {
-                Name = dto.Name
-            };
+            var category = _mapper.Map<Category>(dto);
 
             await _unitOfWork.Categories.AddAsync(category);
             await _unitOfWork.SaveChangesAsync();
@@ -55,25 +52,25 @@ namespace BookStore.Application.Services.Implementation
 
         public async Task<CategoryDto> GetById(int id)
         {
-            var Category = await _unitOfWork.Categories.GetByIdAsync(id);
+            var category = await _unitOfWork.Categories.GetByIdAsync(id);
 
-            if (Category == null)
+            if (category == null)
                 throw new NotFoundException("Category", id);
 
-            return _mapper.Map<CategoryDto>(Category);
+            return _mapper.Map<CategoryDto>(category);
         }
 
         public async Task<CategoryDto> Update(int id, UpdateCategoryDto dto)
         {
-            var Category = await _unitOfWork.Categories.GetByIdAsync(id);
+            var category = await _unitOfWork.Categories.GetByIdAsync(id);
 
-            if (Category == null)
+            if (category == null)
                 throw new NotFoundException("Category", id);
 
-            Category.Name = dto.Name;
+            _mapper.Map(dto, category);
             await _unitOfWork.SaveChangesAsync();
 
-            return _mapper.Map<CategoryDto>(Category);
+            return _mapper.Map<CategoryDto>(category);
         }
     }
 }
