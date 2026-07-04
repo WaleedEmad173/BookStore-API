@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookStore.Application.DTOs.Author;
+using BookStore.Application.DTOs.Book;
 using BookStore.Application.DTOs.Category;
 using BookStore.Domain.Entities;
 
@@ -15,6 +16,9 @@ namespace BookStore.Application.Mapper
             CreateMap<Author, AuthorDto>();
             CreateMap<CreateAuthorDto, Author>();
             CreateMap<UpdateAuthorDto, Author>();
+            CreateMap<Book, BookDto>();
+            CreateMap<CreateBookDto, Book>();
+            CreateMap<UpdateBookDto, Book>();
         }
     }
 }

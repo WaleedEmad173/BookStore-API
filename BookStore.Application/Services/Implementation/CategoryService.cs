@@ -34,7 +34,7 @@ namespace BookStore.Application.Services.Implementation
         public async Task<bool> Delete(int id)
         {
             if (id <= 0)
-                throw new BadRequestException("Invalid Author ID");
+                throw new BadRequestException("Invalid Category ID");
 
             var category = await _unitOfWork.Categories.GetByIdAsync(id);
 
@@ -56,7 +56,7 @@ namespace BookStore.Application.Services.Implementation
         public async Task<CategoryDto> GetById(int id)
         {
             if (id <= 0)
-                throw new BadRequestException("Invalid Author ID");
+                throw new BadRequestException("Invalid Category ID");
 
             var category = await _unitOfWork.Categories.GetByIdAsync(id);
 
@@ -69,7 +69,7 @@ namespace BookStore.Application.Services.Implementation
         public async Task<CategoryDto> Update(int id, UpdateCategoryDto dto)
         {
             if (id <= 0)
-                throw new BadRequestException("Invalid Author ID");
+                throw new BadRequestException("Invalid Category ID");
 
             var category = await _unitOfWork.Categories.GetByIdAsync(id);
 
