@@ -65,7 +65,7 @@ namespace BookStore.Application.Services.Implementation
 
         public async Task<List<BookDto>> GetAll()
         {
-            var books = await _unitOfWork.Books.GetAllAsync();
+            var books = await _unitOfWork.Books.GetBooksWithCategoryAndAuthorAsync();
 
             return _mapper.Map<List<BookDto>>(books);
         }
@@ -75,7 +75,7 @@ namespace BookStore.Application.Services.Implementation
             if (id <= 0)
                 throw new BadRequestException("Invalid Book ID");
 
-            var book = await _unitOfWork.Books.GetByIdAsync(id);
+            var book = await _unitOfWork.Books.GetBookWithCategoryAndAuthorAsync(id);
 
             if (book == null)
                 throw new NotFoundException("Book", id);

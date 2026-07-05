@@ -40,6 +40,11 @@ namespace BookStore.Application.Services.Implementation
 
             if (category == null) throw new NotFoundException("Category", id);
 
+            var hasBooks = await _unitOfWork.Books.AnyAsync(b => b.CategoryId == id);
+
+            if (hasBooks)
+                throw new ConflictException("Cannot delete category because it has related books.");
+
             await _unitOfWork.Categories.DeleteAsync(category);
             await _unitOfWork.SaveChangesAsync();
 

@@ -5,5 +5,8 @@ namespace BookStore.Application.RepositoryInterfaces
 {
     public interface IBookRepository : IGenericRepository<Book>
     {
+        public Task<List<Book>> GetBooksWithCategoryAndAuthorAsync();
+
+        public Task<Book?> GetBookWithCategoryAndAuthorAsync(int id);
     }
 }

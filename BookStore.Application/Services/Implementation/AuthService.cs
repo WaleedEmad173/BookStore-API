@@ -70,7 +70,14 @@ namespace BookStore.Application.Services.Implementation
                 UserName = dto.UserName
             };
 
-            await _userManager.CreateAsync(user, dto.Password);
+            var result = await _userManager.CreateAsync(user, dto.Password);
+
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new BadRequestException($"Registration failed: {errors}");
+            }
+
             await _userManager.AddToRoleAsync(user, "User");
 
             return new AuthResponseDto
